@@ -2,7 +2,7 @@ var data;
 var monster_source = "https://api.open5e.com/v1/monsters/";
 var loadedStatblockFilename = null;
 
-var mon = {
+var default_mon = {
     name: "Monster",
     size: "medium",
     type: "humanoid",
@@ -69,6 +69,8 @@ var mon = {
     doubleColumns: false,
     separationPoint: 1
 };
+
+var mon = default_mon;
 
 const LEGACY_MARKDOWN = false
 const V3_MARKDOWN = true
@@ -155,6 +157,11 @@ var SavedData = {
         }
         reader.readAsText(file);
     },
+}
+
+function ResetMonster(){
+    mon = default_mon;
+    UpdateStatblock(0);
 }
 
 // Find optimal Height
