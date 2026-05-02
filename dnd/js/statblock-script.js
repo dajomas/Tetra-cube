@@ -1916,7 +1916,7 @@ var StringFunctions = {
     },
 
     MakeTraitHTMLLairRegional: function (name, description) {
-        return "<div class=\"property-block lairregional\"><div><li>" + this.FormatString(StringFunctions.RemoveHtmlTags(description), true) + "</li></div></div> <!-- property block -->";
+        return "<div class=\"property-block lairregional\"><div><li><h4>" + StringFunctions.RemoveHtmlTags(name) + ".</h4><p>" + this.FormatString(StringFunctions.RemoveHtmlTags(description), true) + "</li></div></div> <!-- property block -->";
     },
 
     // General string operations
@@ -2043,7 +2043,7 @@ $(function () {
         .fail(function () {
             $("#monster-select-form").html("Unable to load monster presets.")
         });
-        
+
     if(window.location.toString().slice(-25) == "/dnd-statblock-print.html") return; // This script is also used by other pages -> execute the following only for the statblock generator page
     // Load the json data
     $.getJSON("js/JSON/statblockdata.json", function (json) {
