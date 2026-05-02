@@ -1,5 +1,5 @@
 var data;
-
+var monster_source = "https://api.open5e.com/v1/monsters/";
 var mon = {
     name: "Monster",
     size: "medium",
@@ -229,7 +229,7 @@ function UpdateStatblock(moveSeparationPoint) {
     if (mon.isMythic && mon.isLegendary && (mon.mythics.length > 0 || mon.mythicDescription.length > 0))
         AddToTraitList(traitsHTML, mon.mythics, mon.mythicDescription == "" ?
             "<h3>Mythic Actions</h3><div class='property-block'></div>" :
-            ["<h3>Mythic Actions</h3><div class='property-block'>", StringFunctions.FormatString(ReplaceTags(StringFunctions.RemoveHtmlTags(mon.mythicDescription))), "</div></br>"], true);    
+            ["<h3>Mythic Actions</h3><div class='property-block'>", StringFunctions.FormatString(ReplaceTags(StringFunctions.RemoveHtmlTags(mon.mythicDescription))), "</div></br>"], true);
     if (mon.isLair && mon.isLegendary && (mon.lairs.length > 0 || mon.lairDescription.length > 0 || mon.lairDescriptionEnd.length > 0)) {
         AddToTraitList(traitsHTML, mon.lairs, mon.lairDescription == "" ?
             "<h3>Lair Actions</h3><div class='property-block'></div>" :
@@ -411,7 +411,7 @@ function ReplaceTags(desc) {
 function TryMarkdown() {
     let markdownWindow = window.open();
     let markdown = ['<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>', mon.name, '</title><link rel="shortcut icon" type="image/x-icon" href="./dndimages/favicon.ico" /></head><body>'];
-    
+
     markdown.push(
         "<h2>Homebrewery V3</h2>",
         BuildMarkdown(V3_MARKDOWN),
@@ -432,7 +432,7 @@ function BuildMarkdown(isV3Markdown) {
     }
     else {
         if (mon.doubleColumns) {
-            markdownLines.push("___");  
+            markdownLines.push("___");
         }
         markdownLines.push("___");
     }
@@ -442,7 +442,7 @@ function BuildMarkdown(isV3Markdown) {
         `*${StringFunctions.StringCapitalize(mon.size)} ${mon.type}${mon.tag != "" ? ` (${mon.tag})`  : ""}, ${mon.alignment}*`,
         `___`,
         PrintMarkdownProperty(isV3Markdown, "Armor Class", StringFunctions.FormatString(StringFunctions.GetArmorData())),
-        PrintMarkdownProperty(isV3Markdown, "Hit Points", StringFunctions.GetHP()), 
+        PrintMarkdownProperty(isV3Markdown, "Hit Points", StringFunctions.GetHP()),
         PrintMarkdownProperty(isV3Markdown, "Speed", StringFunctions.GetSpeed()),
         `___`);
     AddMarkdownAttributesTable(markdownLines);
@@ -452,8 +452,8 @@ function BuildMarkdown(isV3Markdown) {
 
     for (let index = 0; index < propertiesDisplayArr.length; index++) {
         markdownLines.push(
-            PrintMarkdownProperty(isV3Markdown, 
-            propertiesDisplayArr[index].name, 
+            PrintMarkdownProperty(isV3Markdown,
+            propertiesDisplayArr[index].name,
             Array.isArray(propertiesDisplayArr[index].arr) ? propertiesDisplayArr[index].arr.join(", ") : propertiesDisplayArr[index].arr));
     }
 
@@ -476,7 +476,7 @@ function BuildMarkdown(isV3Markdown) {
     if (isV3Markdown) {
         markdownLines.push("}}");
     }
-    else 
+    else
     {
         LegacyMarkdownFormating(markdownLines);
     }
@@ -510,7 +510,7 @@ function AddMarkdownTraitSection(markdownLines, isV3Markdown, sectionTitle, trai
     {
         return;
     }
-    
+
     let traitDiv = isV3Markdown ? ":" : "";
     let legendary = formatOptions === LEGENDARY;
     let lairOrRegional = formatOptions === LAIR || formatOptions === REGIONAL;
@@ -524,7 +524,7 @@ function AddMarkdownTraitSection(markdownLines, isV3Markdown, sectionTitle, trai
                 .replace(/(\r\n|\r|\n)\s*(\r\n|\r|\n)/g, '\n>\n')
                 .replace(/(\r\n|\r|\n)>/g, `\&lt;br&gt;<br>`)
                 .replace(/(\r\n|\r|\n)/g, `\&lt;br&gt;<br> &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;`);
-            
+
             let traitString = (legendary ? "**" : (lairOrRegional ? "* " : "***")) +
             (lairOrRegional ? "" : traitArr[index].name) +
             (legendary ? ".** " : lairOrRegional ? "" : (".*** ")) +
@@ -545,7 +545,7 @@ function AddMarkdownTraitSection(markdownLines, isV3Markdown, sectionTitle, trai
 function LegacyMarkdownFormating(markdownLines) {
     // Append each line with a >
     // Skip first 1 or 2 lines depending if its wide frame or not
-    let startingIndex = mon.doubleColumns ? 2 : 1; 
+    let startingIndex = mon.doubleColumns ? 2 : 1;
 
     for (let index = startingIndex; index < markdownLines.length; index++)
     {
@@ -556,7 +556,7 @@ function LegacyMarkdownFormating(markdownLines) {
 function ConvertMarkdownToHtmlString(markdownLines) {
     // Add line breaks and code tags
     let builtLines = [];
-    
+
     markdownLines.forEach(line => {
         line.split("<br>").forEach(subLine => {
             builtLines.push(`${subLine}<br>`);
@@ -650,19 +650,19 @@ var FormFunctions = {
         this.MakeDisplayList("lairs", false, true);
         this.MakeDisplayList("regionals", false, true);
 
-        // Is Legendary?	
+        // Is Legendary?
         $("#is-legendary-input").prop("checked", mon.isLegendary);
         this.ShowHideLegendaryCreature();
 
-        // Is Mythic?	
+        // Is Mythic?
         $("#is-mythic-input").prop("checked", mon.isMythic);
         this.ShowHideMythicCreature();
 
-        // Is Lair?	
+        // Is Lair?
         $("#has-lair-input").prop("checked", mon.isLair);
         this.ShowHideLair();
 
-        // Is Regional?	
+        // Is Regional?
         $("#has-regional-input").prop("checked", mon.isRegional);
         this.ShowHideRegional();
 
@@ -927,7 +927,7 @@ var InputFunctions = {
             UpdateStatblock();
             return;
         }
-        $.getJSON("https://api.open5e.com/monsters/" + name, function (jsonArr) {
+        $.getJSON(monster_source + name, function (jsonArr) {
             GetVariablesFunctions.SetPreset(jsonArr);
             FormFunctions.SetForms();
             UpdateStatblock();
@@ -1078,7 +1078,7 @@ var GetVariablesFunctions = {
         mon.speedDesc = $("#custom-speed-prompt").val();
         mon.customSpeed = $("#custom-speed-input").prop("checked");
 
-        // Stats	
+        // Stats
         mon.strPoints = $("#str-input").val();
         mon.dexPoints = $("#dex-input").val();
         mon.conPoints = $("#con-input").val();
@@ -1974,14 +1974,14 @@ var ArrayFunctions = {
 // Document ready function
 $(function () {
     // Load the preset monster names
-    $.getJSON("https://api.open5e.com/monsters/?format=json&fields=slug,name&limit=1000&document__slug=wotc-srd", function (srdArr) {
+    $.getJSON(monster_source + "?format=json&fields=slug,name&limit=1000&document__slug=wotc-srd", function (srdArr) {
         let monsterSelect = $("#monster-select");
         monsterSelect.append("<option value=''></option>");
         monsterSelect.append("<option value=''>-5e SRD-</option>");
         $.each(srdArr.results, function (index, value) {
             monsterSelect.append("<option value='" + value.slug + "'>" + value.name + "</option>");
         })
-        $.getJSON("https://api.open5e.com/monsters/?format=json&fields=slug,name&limit=1000&document__slug=tob", function (tobArr) {
+        $.getJSON(monster_source + "?format=json&fields=slug,name&limit=1000&document__slug=tob", function (tobArr) {
             monsterSelect.append("<option value=''></option>");
             monsterSelect.append("<option value=''>-Tome of Beasts (Kobold Press)-</option>");
             $.each(tobArr.results, function (index, value) {
