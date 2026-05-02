@@ -1916,7 +1916,7 @@ var StringFunctions = {
     },
 
     MakeTraitHTMLLairRegional: function (name, description) {
-        return "<div class=\"property-block lairregional\"><div><li><h4>" + StringFunctions.RemoveHtmlTags(name) + ".</h4><p>" + this.FormatString(StringFunctions.RemoveHtmlTags(description), true) + "</li></div></div> <!-- property block -->";
+        return "<div class=\"property-block lairregional\"><div><li><h4>" + StringFunctions.RemoveHtmlTags(name) + ".</h4><p> " + this.FormatString(StringFunctions.RemoveHtmlTags(description), true) + "</li></div></div> <!-- property block -->";
     },
 
     // General string operations
