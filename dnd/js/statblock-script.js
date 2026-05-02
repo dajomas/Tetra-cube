@@ -147,7 +147,39 @@ var SavedData = {
             Populate();
         }
         reader.readAsText(file);
-},
+    },
+}
+
+// Find optimal Height
+function FindHeight(){
+    UpdateStatblock(0);
+    if (mon.doubleColumns) {
+        L = Number(window.getComputedStyle(document.getElementById('traits-list-left').parentElement.parentElement).height.replace(/[^\d\.]/g, ''));
+        R = Number(window.getComputedStyle(document.getElementById('traits-list-right').parentElement).height.replace(/[^\d\.]/g, ''));
+        if (L<R) {
+            while (L<R) {
+                UpdateStatblock(1);
+                P_Diff = L - R;
+                L = Number(window.getComputedStyle(document.getElementById('traits-list-left').parentElement.parentElement).height.replace(/[^\d\.]/g, ''));
+                R = Number(window.getComputedStyle(document.getElementById('traits-list-right').parentElement).height.replace(/[^\d\.]/g, ''));
+                Diff = L - R;
+            }
+            if (Math.abs(Diff) > Math.abs(P_Diff))
+                UpdateStatblock(-1);
+        } else {
+            while (R<L) {
+                UpdateStatblock(-1);
+                P_Diff = R - L;
+                L = Number(window.getComputedStyle(document.getElementById('traits-list-left').parentElement.parentElement).height.replace(/[^\d\.]/g, ''));
+                R = Number(window.getComputedStyle(document.getElementById('traits-list-right').parentElement).height.replace(/[^\d\.]/g, ''));
+                Diff = R - L;
+            }
+            if (Math.abs(Diff) > Math.abs(P_Diff))
+                UpdateStatblock(1);
+
+        }
+    }
+
 }
 
 // Update the main stat block
