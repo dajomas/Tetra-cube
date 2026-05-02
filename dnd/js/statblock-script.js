@@ -1,5 +1,7 @@
 var data;
 var monster_source = "https://api.open5e.com/v1/monsters/";
+var loadedStatblockFilename = null;
+
 var mon = {
     name: "Monster",
     size: "medium",
@@ -100,9 +102,13 @@ function TryPrint() {
 
 // View as image function
 function TryImage() {
+    let imageFilename = loadedStatblockFilename
+        ? loadedStatblockFilename.replace(/\.[^/.]+$/, "")
+        : mon.name.toLowerCase();
+
     domtoimage.toBlob(document.getElementById("stat-block"))
-        .then(function (blob) {
-            window.saveAs(blob, mon.name.toLowerCase() + ".png");
+        .then(function(blob) {
+            window.saveAs(blob, imageFilename + ".png");
         });
 }
 
@@ -130,17 +136,18 @@ var SavedData = {
             mon = JSON.parse(savedData);
     },
 
-    RetrieveFromFile: function () {
-        let file = $("#file-upload").prop("files")[0],
+    RetrieveFromFile: function() {
+        let file = $("#file-upload").prop('files')[0],
             reader = new FileReader();
 
-        reader.onload = function (e) {
+        loadedStatblockFilename = file && file.name ? file.name : null;
+
+        reader.onload = function(e) {
             mon = JSON.parse(reader.result);
             Populate();
-        };
-
+        }
         reader.readAsText(file);
-    },
+},
 }
 
 // Update the main stat block
