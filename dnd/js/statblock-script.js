@@ -2,7 +2,7 @@ var data;
 var monster_source = "https://api.open5e.com/v1/monsters/";
 var loadedStatblockFilename = null;
 
-var default_mon = {
+const default_mon = {
     name: "Monster",
     size: "medium",
     type: "humanoid",
@@ -70,7 +70,7 @@ var default_mon = {
     separationPoint: 1
 };
 
-var mon = default_mon;
+var mon = Object.assign(default_mon);
 
 const LEGACY_MARKDOWN = false
 const V3_MARKDOWN = true
@@ -160,8 +160,8 @@ var SavedData = {
 }
 
 function ResetMonster(){
-    mon = default_mon;
-    UpdateStatblock(0);
+    mon = Object.assign(default_mon);
+    Populate()
 }
 
 // Find optimal Height
